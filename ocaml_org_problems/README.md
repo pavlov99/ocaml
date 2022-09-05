@@ -20,4 +20,10 @@ dune build
 dune exec ocaml_org_problems
 ```
 
+### Lint
+
+```
+dune fmt
+```
+
 See [quickstart guide](https://dune.readthedocs.io/en/stable/quick-start.html).
