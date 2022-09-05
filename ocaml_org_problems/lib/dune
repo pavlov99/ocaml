@@ -1,0 +1,5 @@
+(library
+ (name m1_working_with_lists)
+ (inline_tests)
+ (preprocess
+  (pps ppx_inline_test)))

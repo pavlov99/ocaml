@@ -1,0 +1,4 @@
+(executable
+ (public_name ocaml_org_problems)
+ (name main)
+ (libraries m1_working_with_lists))

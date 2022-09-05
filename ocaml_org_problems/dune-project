@@ -1,0 +1,26 @@
+(lang dune 3.4)
+
+(name ocaml_org_problems)
+
+(generate_opam_files true)
+
+(source
+ (github pavlov99/ocaml))
+
+(authors "Kirill Pavlov")
+
+(maintainers "Kirill Pavlov")
+
+(license MIT)
+
+(documentation https://url/to/documentation)
+
+(package
+ (name ocaml_org_problems)
+ (synopsis "Solutions to problems from ocaml.org/problems")
+ (description "Solutions to problems from ocaml.org/problems")
+ (depends ocaml dune)
+ (tags
+  (topics "to describe" your project)))
+
+; See the complete stanza docs at https://dune.readthedocs.io/en/stable/dune-files.html#dune-project
