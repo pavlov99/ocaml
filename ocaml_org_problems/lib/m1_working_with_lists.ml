@@ -26,3 +26,8 @@ let rec list_length = function [] -> 0 | _ :: t -> 1 + list_length t
 
 let%test _ = list_length [ "a"; "b"; "c" ] = 3
 let%test _ = list_length [] = 0
+
+(** Reverse a list *)
+let rec list_rev = function [] -> [] | h :: t -> list_rev t @ [ h ]
+
+let%test _ = list_rev [ "a"; "b"; "c" ] = [ "c"; "b"; "a" ]
