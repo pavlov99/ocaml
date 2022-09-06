@@ -20,3 +20,9 @@ let rec list_nth n = function
 
 let%test _ = list_nth 2 [ "a"; "b"; "c"; "d"; "e" ] = Some "c"
 let%test _ = list_nth 2 [ "a" ] = None
+
+(** Length of a list *)
+let rec list_length = function [] -> 0 | _ :: t -> 1 + list_length t
+
+let%test _ = list_length [ "a"; "b"; "c" ] = 3
+let%test _ = list_length [] = 0
