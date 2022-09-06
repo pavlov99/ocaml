@@ -36,3 +36,10 @@ let list_rev list =
   helper [] list
 
 let%test _ = list_rev [ "a"; "b"; "c" ] = [ "c"; "b"; "a" ]
+
+(** Palindrome
+    Fast implementation: https://stackoverflow.com/questions/47098343/ocaml-function-to-check-if-list-is-palindrome-with-floorn-2-recursive-calls-an#answer-47100848*)
+let is_palindrome list = list = List.rev list
+
+let%test _ = is_palindrome [ "x"; "a"; "m"; "a"; "x" ] = true
+let%test _ = is_palindrome [ "a"; "b" ] = false
