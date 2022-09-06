@@ -58,3 +58,16 @@ let flatten list =
 let%test _ =
   flatten [ One "a"; Many [ One "b"; Many [ One "c"; One "d" ]; One "e" ] ]
   = [ "a"; "b"; "c"; "d"; "e" ]
+
+(** Eliminate duplicates *)
+let compress list =
+  let rec aux acc = function
+    | [] -> acc
+    | h :: t -> aux (if acc = [] || List.hd acc != h then h :: acc else acc) t
+  in
+  List.rev (aux [] list)
+
+let%test _ =
+  compress
+    [ "a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e" ]
+  = [ "a"; "b"; "c"; "a"; "d"; "e" ]
