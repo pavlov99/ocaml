@@ -43,3 +43,16 @@ let is_palindrome list = list = List.rev list
 
 let%test _ = is_palindrome [ "x"; "a"; "m"; "a"; "x" ] = true
 let%test _ = is_palindrome [ "a"; "b" ] = false
+
+(** Flatten a list *)
+type 'a node = One of 'a | Many of 'a node list
+
+let rec flatten list =
+  match list with
+  | [] -> []
+  | One h :: t -> h :: flatten t
+  | Many h :: t -> flatten h @ flatten t
+
+let%test _ =
+  flatten [ One "a"; Many [ One "b"; Many [ One "c"; One "d" ]; One "e" ] ]
+  = [ "a"; "b"; "c"; "d"; "e" ]
