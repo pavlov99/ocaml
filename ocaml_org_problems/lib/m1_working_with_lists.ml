@@ -27,7 +27,12 @@ let rec list_length = function [] -> 0 | _ :: t -> 1 + list_length t
 let%test _ = list_length [ "a"; "b"; "c" ] = 3
 let%test _ = list_length [] = 0
 
-(** Reverse a list *)
-let rec list_rev = function [] -> [] | h :: t -> list_rev t @ [ h ]
+(** Reverse a list
+  See tail recursion notes https://v2.ocaml.org/api/List.html
+  and appending to the end of the list anti-pattern
+  https://stackoverflow.com/questions/6732524/what-is-the-easiest-way-to-add-an-element-to-the-end-of-the-list#answer-6735757*)
+let list_rev list =
+  let rec helper acc = function [] -> acc | h :: t -> helper (h :: acc) t in
+  helper [] list
 
 let%test _ = list_rev [ "a"; "b"; "c" ] = [ "c"; "b"; "a" ]
