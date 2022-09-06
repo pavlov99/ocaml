@@ -60,12 +60,9 @@ let%test _ =
   = [ "a"; "b"; "c"; "d"; "e" ]
 
 (** Eliminate duplicates *)
-let compress list =
-  let rec aux acc = function
-    | [] -> acc
-    | h :: t -> aux (if acc = [] || List.hd acc != h then h :: acc else acc) t
-  in
-  List.rev (aux [] list)
+let rec compress = function
+  | a :: (b :: _ as t) -> if a = b then compress t else a :: compress t
+  | l -> l
 
 let%test _ =
   compress
