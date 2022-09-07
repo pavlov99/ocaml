@@ -68,3 +68,27 @@ let%test _ =
   compress
     [ "a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e" ]
   = [ "a"; "b"; "c"; "a"; "d"; "e" ]
+
+(** Pack consecutive duplicates *)
+let pack list =
+  let rec aux acc1 acc2 = function
+    | [] -> acc1 :: acc2
+    | h :: t ->
+        if acc1 = [] || h == List.hd acc1 then aux (h :: acc1) acc2 t
+        else aux [ h ] (acc1 :: acc2) t
+  in
+  List.rev (aux [] [] list)
+
+let%test _ =
+  pack
+    [
+      "a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "d"; "e"; "e"; "e"; "e";
+    ]
+  = [
+      [ "a"; "a"; "a"; "a" ];
+      [ "b" ];
+      [ "c"; "c" ];
+      [ "a"; "a" ];
+      [ "d"; "d" ];
+      [ "e"; "e"; "e"; "e" ];
+    ]
