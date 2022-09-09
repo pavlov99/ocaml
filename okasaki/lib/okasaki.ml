@@ -1,7 +1,18 @@
-module UnbalancedSet = struct
+module type Set = sig
+  type 'a t
+
+  val empty : 'a t
+  val mem : 'a -> 'a t -> bool
+  val insert : 'a -> 'a t -> 'a t
+  val size : 'a t -> int
+end
+
+module UnbalancedSet : Set = struct
   type 'a tree = Empty | Node of 'a tree * 'a * 'a tree
+  type 'a t = 'a tree
 
   let empty = Empty
+  let rec size = function Empty -> 0 | Node (l, _, r) -> 1 + size l + size r
 
   let rec mem el = function
     | Empty -> false
@@ -18,17 +29,7 @@ module UnbalancedSet = struct
         else Node (l, v, r)
 end
 
-let%test _ = UnbalancedSet.mem 0 Empty = false
-let%test _ = UnbalancedSet.mem 0 (Node (Empty, 0, Empty)) = true
-
-let%test _ =
-  UnbalancedSet.mem (-1) (Node (Node (Empty, -1, Empty), 0, Empty)) = true
-
-let%test _ = UnbalancedSet.insert 0 Empty = Node (Empty, 0, Empty)
-
-let%test _ =
-  UnbalancedSet.insert 0 (Node (Empty, 0, Empty)) = Node (Empty, 0, Empty)
-
-let%test _ =
-  UnbalancedSet.insert 1 (Node (Empty, 0, Empty))
-  = Node (Empty, 0, Node (Empty, 1, Empty))
+let%test _ = UnbalancedSet.(mem 0 empty) = false
+let%test _ = UnbalancedSet.(mem 0 (empty |> insert 0)) = true
+let%test _ = UnbalancedSet.(mem 1 (empty |> insert 0 |> insert 1)) = true
+let%test _ = UnbalancedSet.(empty |> insert 0 |> insert 0 |> size) = 1
