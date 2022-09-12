@@ -29,6 +29,19 @@ module UnbalancedSet : Set = struct
         else Node (l, v, r)
 end
 
+module ListSet : Set = struct
+  type 'a t = 'a list
+
+  let empty = []
+  let size = List.length
+
+  let rec mem el = function
+    | [] -> false
+    | h :: t -> if el = h then true else mem el t
+
+  let insert el t = if mem el t then t else el :: t
+end
+
 let%test _ = UnbalancedSet.(mem 0 empty) = false
 let%test _ = UnbalancedSet.(mem 0 (empty |> insert 0)) = true
 let%test _ = UnbalancedSet.(mem 1 (empty |> insert 0 |> insert 1)) = true
