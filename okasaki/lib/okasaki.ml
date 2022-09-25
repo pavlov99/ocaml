@@ -46,3 +46,38 @@ let%test _ = UnbalancedSet.(mem 0 empty) = false
 let%test _ = UnbalancedSet.(mem 0 (empty |> insert 0)) = true
 let%test _ = UnbalancedSet.(mem 1 (empty |> insert 0 |> insert 1)) = true
 let%test _ = UnbalancedSet.(empty |> insert 0 |> insert 0 |> size) = 1
+
+module type Heap = sig
+  type 'a t
+
+  val empty : 'a t
+  val is_empty : 'a t -> bool
+  val insert : 'a -> 'a t -> 'a t
+  val merge : 'a t -> 'a t -> 'a t
+  val find_min : 'a t -> 'a
+  val delete_min : 'a t -> 'a t
+end
+
+module LeftistHeap = struct
+  type 'a heap = Empty | Node of int * 'a * 'a heap * 'a heap
+
+  let empty = Empty
+  let is_empty = function Empty -> true | _ -> false
+  let rank = function Empty -> 0 | Node (r, _, _, _) -> r
+
+  let make_heap el h1 h2 =
+    if rank h1 >= rank h2 then Node (rank h2 + 1, el, h1, h2)
+    else Node (rank h1 + 1, el, h2, h1)
+
+  let rec merge h1 h2 =
+    match (h1, h2) with
+    | Empty, h2 -> h2
+    | h1, Empty -> h1
+    | Node (_, x, a1, b1), Node (_, y, a2, b2) ->
+        if x <= y then make_heap x a1 (merge b1 h2)
+        else make_heap y a2 (merge h1 b2)
+
+  let insert x h = merge (Node (1, x, Empty, Empty)) h
+  let find_min = function Empty -> None | Node (_, x, _, _) -> x
+  let delete_min = function Empty -> Empty | Node (_, _, a, b) -> merge a b
+end
