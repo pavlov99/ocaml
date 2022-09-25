@@ -69,6 +69,9 @@ module LeftistHeap = struct
     if rank h1 >= rank h2 then Node (rank h2 + 1, el, h1, h2)
     else Node (rank h1 + 1, el, h2, h1)
 
+  (* Merge two heaps: pick min of roots with its left sub-heap
+     and merge its right sub-heap with the other heap. If ranks
+     changed, swap siblings.*)
   let rec merge h1 h2 =
     match (h1, h2) with
     | Empty, h2 -> h2
@@ -80,4 +83,9 @@ module LeftistHeap = struct
   let insert x h = merge (Node (1, x, Empty, Empty)) h
   let find_min = function Empty -> None | Node (_, x, _, _) -> x
   let delete_min = function Empty -> Empty | Node (_, _, a, b) -> merge a b
+
+  (* Convert list to heap. Example usage LeftistHeap.of_list (3 :: 1 :: 0 :: []);; *)
+  let of_list l =
+    let rec accu h = function [] -> h | x :: y -> accu (insert x h) y in
+    accu Empty l
 end
